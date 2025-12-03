@@ -166,3 +166,22 @@ def train_interactive_step_by_step(perceptron, X, y, visualizer):
     print(f"{'='*60}")
     
     return perceptron.errors_history
+
+def configure_parameters():
+    params = {}
+    
+    print("\n--- Paraméterek beállítása ---")
+    
+    print("Tanulási ráta (Enter = 0.01):")
+    lr_input = input("Learning rate: ").strip()
+    params['learning_rate'] = float(lr_input) if lr_input else 0.01
+    
+    print("Maximális epoch szám (Enter = 100):")
+    max_epochs_input = input("Max epochs: ").strip()
+    params['max_epochs'] = int(max_epochs_input) if max_epochs_input else 100
+    
+    print(f"\nBeállított paraméterek:")
+    print(f"  Tanulási ráta: {params['learning_rate']}")
+    print(f"  Max epoch: {params['max_epochs']}")
+    
+    return params
