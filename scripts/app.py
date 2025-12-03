@@ -422,3 +422,33 @@ with tab2:
                 )
                 st.plotly_chart(fig_animated, use_container_width=True, key="animated_boundary")
             
+            with tab4:
+                st.subheader("Konvergencia görbe")
+        
+        if not st.session_state.perceptron:
+            st.warning("Először inicializálja a perceptront!")
+        elif not st.session_state.perceptron.errors_history:
+            st.warning("Először tanítsa a perceptront!")
+        else:
+            fig_conv = plot_convergence_interactive(st.session_state.perceptron.errors_history)
+            st.plotly_chart(fig_conv, use_container_width=True, key="convergence_plot")
+            
+            col_stat1, col_stat2, col_stat3 = st.columns(3)
+            
+            with col_stat1:
+                total_epochs = len(st.session_state.perceptron.errors_history)
+                st.metric("Összes epoch", total_epochs)
+            
+            with col_stat2:
+                if st.session_state.perceptron.errors_history[-1] == 0:
+                    convergence_epoch = next(
+                        (i+1 for i, err in enumerate(st.session_state.perceptron.errors_history) if err == 0),
+                        None
+                    )
+                    st.metric("Konvergencia epoch", convergence_epoch if convergence_epoch else "Nincs")
+                else:
+                    st.metric("Konvergencia", "Nincs elérve")
+            
+            with col_stat3:
+                min_errors = min(st.session_state.perceptron.errors_history)
+                st.metric("Minimum hibák", min_errors)
