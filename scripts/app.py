@@ -202,3 +202,24 @@ if st.button("Adatok betöltése", type="primary", use_container_width=True):
         else:
             st.error("Hiba történt az adatbetöltés során!")
     
+        st.divider()
+    
+st.subheader("Perceptron Paraméterek")
+    
+learning_rate = st.slider(
+        "Tanulási ráta (Learning Rate)",
+        min_value=0.001,
+        max_value=0.5,
+        value=0.01,
+        step=0.001,
+        format="%.3f"
+    )
+    
+max_epochs = st.number_input(
+        "Maximális epoch szám",
+        min_value=1,
+        max_value=1000,
+        value=100,
+        step=10
+    )
+    
