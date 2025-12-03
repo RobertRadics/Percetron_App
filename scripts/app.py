@@ -280,3 +280,33 @@ with tab1:
             st.subheader("Osztály eloszlás")
             class_counts = pd.Series(st.session_state.y).value_counts().sort_index()
             st.bar_chart(class_counts)
+            
+with tab2:
+        st.subheader("Perceptron Tanítás")
+        
+        if not st.session_state.perceptron:
+            st.warning("Először inicializálja a perceptront az oldalsávban!")
+        else:
+            col_info1, col_info2, col_info3 = st.columns(3)
+            
+            with col_info1:
+                st.metric("Tanulási ráta", f"{st.session_state.perceptron.learning_rate:.3f}")
+            with col_info2:
+                if st.session_state.perceptron.errors_history:
+                    st.metric("Utolsó epoch hibái", st.session_state.perceptron.errors_history[-1])
+                else:
+                    st.metric("Utolsó epoch hibái", "N/A")
+            with col_info3:
+                st.metric("Epoch-ok száma", len(st.session_state.perceptron.errors_history))
+            
+            st.subheader("Aktuális paraméterek")
+            col_w1, col_w2, col_bias = st.columns(3)
+            
+            with col_w1:
+                st.metric("Súly 1 (w1)", f"{st.session_state.perceptron.weights[0]:.4f}")
+            with col_w2:
+                st.metric("Súly 2 (w2)", f"{st.session_state.perceptron.weights[1]:.4f}")
+            with col_bias:
+                st.metric("Bias (b)", f"{st.session_state.perceptron.bias:.4f}")
+            
+            st.divider()
