@@ -70,3 +70,11 @@ def initialize_perceptron(X, learning_rate=0.01):
     print(f"  Kezdeti súlyok: {perceptron.weights}")
     print(f"  Kezdeti bias: {perceptron.bias:.3f}")
     return perceptron
+
+def train_step_interactive(perceptron, X, y):
+    print("\n--- Egy lépés tanítás ---")
+    errors = perceptron.fit_step(X, y)
+    print(f"Hibák száma ebben a lépésben: {errors}")
+    print(f"Aktuális súlyok: {perceptron.weights}")
+    print(f"Aktuális bias: {perceptron.bias:.3f}")
+    return errors
