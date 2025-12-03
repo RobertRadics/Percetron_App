@@ -23,3 +23,19 @@ class Perceptron:
         
         linear_output = np.dot(X, self.weights) + self.bias
         return np.array([self.activation_function(x) for x in linear_output])
+      
+    def fit_step(self, X, y):
+        errors = 0
+        
+        for i in range(len(X)):
+            prediction = self.predict(X[i])
+            
+            if prediction != y[i]:
+                errors += 1
+                
+                error = y[i] - prediction
+                self.weights += self.learning_rate * error * X[i]
+                self.bias += self.learning_rate * error
+        
+        return errors
+    
