@@ -452,3 +452,26 @@ with tab2:
             with col_stat3:
                 min_errors = min(st.session_state.perceptron.errors_history)
                 st.metric("Minimum hibák", min_errors)
+                
+else:
+st.info("""
+     **Üdvözöljük a Perceptron Tanító Alkalmazásban!**
+    
+    Kezdéshez:
+    1. Válasszon egy adatfájlt az oldalsávban
+    2. Kattintson a " Adatok betöltése" gombra
+    3. Inicializálja a perceptront
+    4. Kezdje el a tanítást!
+    
+    **Elérhető funkciók:**
+    -  Interaktív adatmegjelenítés
+    -  Lépésenkénti vagy teljes tanítás
+    -  Valós idejű vizualizációk
+    -  Konvergencia követése
+    """)
+    
+st.subheader(" Elérhető adatfájlok")
+if data_files:
+        st.write("A következő adatfájlok érhetők el:")
+        for file in data_files:
+            st.write(f"- {file}")
