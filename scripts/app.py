@@ -11,3 +11,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.perceptron import Perceptron
 from src.data_loader import DataLoader
+
+st.set_page_config(
+    page_title="Perceptron Tanító",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
