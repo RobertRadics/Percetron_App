@@ -24,3 +24,40 @@ def print_menu():
     print("8. Paraméterek beállítása")
     print("9. Kilépés")
     print("="*60)
+    
+def load_data_interactive():
+    loader = DataLoader()
+    
+    print("\n--- Adatfájl betöltése ---")
+    print("Elérhető adatfájlok:")
+    print("  - data.csv (alapértelmezett)")
+    print("  - data_easy.csv (könnyen szeparálható)")
+    print("  - data_hard.csv (nehezebben szeparálható)")
+    print("  - data_vertical.csv (függőleges elválasztás)")
+    print("  - data_diagonal.csv (átlós elválasztás)")
+    print("\nAdja meg a CSV fájl nevét (vagy nyomjon Enter-t az alapértelmezett 'data.csv' használatához):")
+    filepath = input("Fájlnév: ").strip()
+    
+    if not filepath:
+        filepath = "data.csv"
+    
+    if not filepath.endswith('.csv'):
+        filepath += '.csv'
+    
+    if not os.path.isabs(filepath):
+        data_dir = Path(__file__).parent.parent / 'data'
+        data_file = data_dir / filepath
+        if data_file.exists():
+            filepath = str(data_file)
+        else:
+            current_dir_file = os.path.join(os.getcwd(), filepath)
+            if os.path.exists(current_dir_file):
+                filepath = current_dir_file
+            else:
+                filepath = str(data_file)
+    
+    if loader.load_from_file(filepath):
+        loader.print_summary()
+        return loader.get_data()
+    else:
+        return None, None
