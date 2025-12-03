@@ -141,3 +141,17 @@ def plot_decision_boundary_interactive(X, y, perceptron, epoch=None):
     )
     
     return fig
+
+def plot_convergence_interactive(errors_history):
+    epochs = list(range(1, len(errors_history) + 1))
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatter(
+        x=epochs,
+        y=errors_history,
+        mode='lines+markers',
+        name='Hibák száma',
+        line=dict(color='#3b82f6', width=3),
+        marker=dict(size=8, color='#3b82f6')
+    ))
