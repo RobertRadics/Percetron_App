@@ -259,3 +259,24 @@ if st.session_state.data_loaded:
             st.metric("Perceptron", "Inicializálva")
         else:
             st.metric("Perceptron", "Nincs inicializálva")
+
+tab1, tab2, tab3, tab4 = st.tabs(["Adatok", "Tanítás", "Vizualizáció", "Konvergencia"])
+    
+with tab1:
+        st.subheader("Adatpontok megjelenítése")
+        
+        col_left, col_right = st.columns([2, 1])
+        
+        with col_left:
+            fig_data = plot_data_interactive(st.session_state.X, st.session_state.y)
+            st.plotly_chart(fig_data, use_container_width=True, key="data_plot")
+        
+        with col_right:
+            st.subheader("Adatstatisztikák")
+            df_data = pd.DataFrame(st.session_state.X, columns=[f'X{i+1}' for i in range(st.session_state.X.shape[1])])
+            df_data['Label'] = st.session_state.y
+            st.dataframe(df_data.describe(), use_container_width=True)
+            
+            st.subheader("Osztály eloszlás")
+            class_counts = pd.Series(st.session_state.y).value_counts().sort_index()
+            st.bar_chart(class_counts)
