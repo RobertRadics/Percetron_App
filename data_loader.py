@@ -36,3 +36,20 @@ class DataLoader:
             if self.X.shape[1] < 2:
                 print("Hiba: Legalább 2 bemeneti attribútum szükséges")
                 return False
+            
+            print(f"Sikeres betöltés: {len(self.data)} sor, {self.X.shape[1]} attribútum")
+            print(f"Attribútumok: {', '.join(self.feature_names)}")
+            print(f"Címke oszlop: {label_name}")
+            print(f"Osztályok: {unique_labels}")
+            
+            return True
+            
+        except pd.errors.EmptyDataError:
+            print("Hiba: A CSV fájl üres")
+            return False
+        except pd.errors.ParserError as e:
+            print(f"Hiba: A CSV fájl formátuma hibás: {e}")
+            return False
+        except Exception as e:
+            print(f"Hiba történt a fájl betöltése során: {e}")
+            return False
