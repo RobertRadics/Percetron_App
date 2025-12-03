@@ -328,3 +328,33 @@ with tab2:
                         else:
                             st.info(f"Epoch {st.session_state.current_epoch}: {errors} hiba")
                         st.rerun()
+                        with col_train2:
+                            if st.button("Teljes tanítás", use_container_width=True, type="primary"):
+                                if st.session_state.perceptron and st.session_state.X is not None:
+                                    progress_bar = st.progress(0)
+                        status_text = st.empty()
+                        
+                        st.session_state.perceptron.errors_history = []
+                        st.session_state.perceptron.weights_history = []
+                        st.session_state.current_epoch = 0
+                        
+                        for epoch in range(max_epochs):
+                            errors = st.session_state.perceptron.fit_step(st.session_state.X, st.session_state.y)
+                            st.session_state.perceptron.errors_history.append(errors)
+                            st.session_state.perceptron.weights_history.append(
+                                (st.session_state.perceptron.weights.copy(), st.session_state.perceptron.bias)
+                            )
+                            st.session_state.current_epoch += 1
+                            
+                            progress = (epoch + 1) / max_epochs
+                            progress_bar.progress(progress)
+                            status_text.text(f"Epoch {epoch + 1}/{max_epochs}: {errors} hiba")
+                            
+                            if errors == 0:
+                                st.success(f"Konvergencia elérve! {epoch + 1} epoch után nincs hiba!")
+                                break
+                        
+                        progress_bar.empty()
+                        status_text.empty()
+                        st.rerun()
+            
