@@ -357,4 +357,27 @@ with tab2:
                         progress_bar.empty()
                         status_text.empty()
                         st.rerun()
+                with col_train3:
+                    if st.button("Újraindítás", use_container_width=True):
+                        reset_training()
+                    if st.session_state.X is not None:
+                        st.session_state.perceptron = Perceptron(
+                            learning_rate=learning_rate,
+                            n_features=st.session_state.X.shape[1]
+                        )
+                    st.rerun()
+            
+            if st.session_state.perceptron.errors_history:
+                st.divider()
+                st.subheader("Tanítási előzmények")
+                
+                history_df = pd.DataFrame({
+                    'Epoch': range(1, len(st.session_state.perceptron.errors_history) + 1),
+                    'Hibák száma': st.session_state.perceptron.errors_history,
+                    'Súly 1': [w[0][0] for w in st.session_state.perceptron.weights_history],
+                    'Súly 2': [w[0][1] for w in st.session_state.perceptron.weights_history],
+                    'Bias': [w[1] for w in st.session_state.perceptron.weights_history]
+                })
+                
+                st.dataframe(history_df.tail(20), use_container_width=True)
             
