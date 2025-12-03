@@ -78,3 +78,21 @@ def train_step_interactive(perceptron, X, y):
     print(f"Aktuális súlyok: {perceptron.weights}")
     print(f"Aktuális bias: {perceptron.bias:.3f}")
     return errors
+
+def train_full_interactive(perceptron, X, y):
+    print("\n--- Teljes tanítás ---")
+    print("Adja meg a maximális epoch számot (Enter = 100):")
+    max_epochs_input = input("Max epoch: ").strip()
+    max_epochs = int(max_epochs_input) if max_epochs_input else 100
+    
+    print(f"\nTanítás indítása {max_epochs} epoch-ra...")
+    errors_history = perceptron.fit(X, y, max_epochs=max_epochs, verbose=True)
+    
+    print(f"\nTanítás befejezve!")
+    print(f"Összesen {len(errors_history)} epoch futott le.")
+    if errors_history[-1] == 0:
+        print("Konvergencia elérve - nincs hiba!")
+    else:
+        print(f"Még mindig vannak hibák: {errors_history[-1]}")
+    
+    return errors_history
