@@ -39,3 +39,23 @@ class Perceptron:
         
         return errors
     
+    def fit(self, X, y, max_epochs=100, verbose=True):
+        self.errors_history = []
+        self.weights_history = []
+        
+        for epoch in range(max_epochs):
+            errors = self.fit_step(X, y)
+            
+            self.errors_history.append(errors)
+            self.weights_history.append((self.weights.copy(), self.bias))
+            
+            if verbose:
+                print(f"Epoch {epoch + 1}/{max_epochs}: Hibák száma = {errors}, "
+                      f"Súlyok = {self.weights}, Bias = {self.bias:.3f}")
+            
+            if errors == 0:
+                if verbose:
+                    print(f"Konvergencia elérve {epoch + 1} epoch után!")
+                break
+        
+        return self.errors_history
