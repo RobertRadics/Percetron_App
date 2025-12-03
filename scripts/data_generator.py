@@ -25,3 +25,17 @@ def generate_linear_separable_data(n_samples=100, n_features=2, random_state=Non
     df['Label'] = y.astype(int)
     
     return df
+
+def generate_and_save_example_data(filename="example_data.csv", n_samples=100):
+    df = generate_linear_separable_data(n_samples=n_samples, random_state=42)
+    data_dir = Path(__file__).parent.parent / 'data'
+    data_dir.mkdir(exist_ok=True)
+    file_path = data_dir / filename
+    df.to_csv(file_path, index=False)
+    print(f"Példa adatfájl létrehozva: {file_path}")
+    print(f"Adatpontok száma: {len(df)}")
+    return df
+
+
+if __name__ == "__main__":
+    generate_and_save_example_data("example_data.csv", n_samples=100)
