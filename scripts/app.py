@@ -110,3 +110,34 @@ def plot_decision_boundary_interactive(X, y, perceptron, epoch=None):
         name='Osztály 1',
         marker=dict(size=12, color='#3b82f6', line=dict(width=1, color='black'))
     ))
+    x1_min, x1_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
+    x2_min, x2_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
+    
+    x1_boundary, x2_boundary = perceptron.get_decision_boundary((x1_min, x1_max))
+    
+    mask = (x2_boundary >= x2_min) & (x2_boundary <= x2_max)
+    
+    fig.add_trace(go.Scatter(
+        x=x1_boundary[mask], y=x2_boundary[mask],
+        mode='lines',
+        name='Döntési határ',
+        line=dict(color='#10b981', width=3)
+    ))
+    
+    title = 'Perceptron döntési határa'
+    if epoch is not None:
+        title += f' - Epoch {epoch}'
+    
+    fig.update_layout(
+        title=title,
+        xaxis_title='X1',
+        yaxis_title='X2',
+        width=800,
+        height=600,
+        title_font_size=20,
+        font_size=12,
+        xaxis=dict(range=[x1_min, x1_max]),
+        yaxis=dict(range=[x2_min, x2_max])
+    )
+    
+    return fig
