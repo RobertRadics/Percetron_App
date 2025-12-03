@@ -168,3 +168,8 @@ def plot_convergence_interactive(errors_history):
     )
     
     return fig
+
+data_dir = Path(__file__).parent.parent / 'data'
+data_files = [f for f in os.listdir(data_dir) if f.endswith('.csv')] if data_dir.exists() else []
+
+st.markdown('<h1 class="main-header">Perceptron Tanító Alkalmazás</h1>', unsafe_allow_html=True)
