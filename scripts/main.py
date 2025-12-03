@@ -185,3 +185,124 @@ def configure_parameters():
     print(f"  Max epoch: {params['max_epochs']}")
     
     return params
+
+def main():
+    X = None
+    y = None
+    perceptron = None
+    visualizer = Visualizer()
+    params = {'learning_rate': 0.01, 'max_epochs': 100}
+    
+    print("Üdvözöljük az Interaktív Perceptron Tanító Alkalmazásban!")
+    print("Kezdésként töltse be az adatfájlt (opció 1).")
+    
+    while True:
+        print_menu()
+        choice = input("\nVálasszon egy opciót (1-9): ").strip()
+        
+        if choice == '1':
+            X, y = load_data_interactive()
+            if X is not None:
+                print("\nAdatok sikeresen betöltve!")
+            else:
+                print("\nAdatbetöltés sikertelen!")
+        
+        elif choice == '2':
+            if X is None or y is None:
+                print("\nElőször töltse be az adatokat! (Opció 1)")
+            else:
+                print("\nAdatpontok megjelenítése...")
+                fig = visualizer.plot_data(X, y)
+                visualizer.show()
+        
+        elif choice == '3':
+            if X is None or y is None:
+                print("\nElőször töltse be az adatokat! (Opció 1)")
+            else:
+                perceptron = initialize_perceptron(X, params['learning_rate'])
+                print("\nPerceptron inicializálva!")
+        
+        elif choice == '4':
+            if perceptron is None:
+                print("\nElőször inicializálja a perceptront! (Opció 3)")
+            elif X is None or y is None:
+                print("\nElőször töltse be az adatokat! (Opció 1)")
+            else:
+                errors = train_step_interactive(perceptron, X, y)
+                perceptron.errors_history.append(errors)
+                perceptron.weights_history.append((perceptron.weights.copy(), perceptron.bias))
+                
+                if errors == 0:
+                    print("\nNincs hiba - a perceptron konvergált!")
+                else:
+                    print("\nSzeretné megjeleníteni a grafikont? (i/n)")
+                    show_graph = input("Választás: ").strip().lower()
+                    if show_graph == 'i':
+                        epoch_num = len(perceptron.errors_history)
+                        fig = visualizer.plot_with_decision_boundary(
+                            X, y, perceptron, epoch=epoch_num, show_history=True
+                        )
+                        visualizer.show()
+        
+        elif choice == '5':
+            if perceptron is None:
+                print("\nElőször inicializálja a perceptront! (Opció 3)")
+            elif X is None or y is None:
+                print("\nElőször töltse be az adatokat! (Opció 1)")
+            else:
+                errors_history = train_full_interactive(perceptron, X, y)
+        
+        elif choice == '5a' or choice.lower() == '5a':
+            if perceptron is None:
+                print("\nElőször inicializálja a perceptront! (Opció 3)")
+            elif X is None or y is None:
+                print("\nElőször töltse be az adatokat! (Opció 1)")
+            else:
+                errors_history = train_interactive_step_by_step(perceptron, X, y, visualizer)
+        
+        elif choice == '6':
+            if perceptron is None:
+                print("\nElőször inicializálja és tanítsa a perceptront! (Opció 3-4 vagy 5)")
+            elif X is None or y is None:
+                print("\nElőször töltse be az adatokat! (Opció 1)")
+            else:
+                print("\nDöntési határ megjelenítése...")
+                epoch_num = len(perceptron.errors_history) if perceptron.errors_history else None
+                fig = visualizer.plot_with_decision_boundary(
+                    X, y, perceptron, epoch=epoch_num, show_history=True
+                )
+                visualizer.show()
+        
+        elif choice == '7':
+            if perceptron is None or not perceptron.errors_history:
+                print("\nElőször tanítsa a perceptront! (Opció 4 vagy 5)")
+            else:
+                print("\nKonvergencia görbe megjelenítése...")
+                fig = visualizer.plot_convergence(perceptron.errors_history)
+                visualizer.show()
+        
+        elif choice == '8':
+            params = configure_parameters()
+            if perceptron is not None and X is not None:
+                print("\nÚj perceptron inicializálása az új paraméterekkel...")
+                perceptron = initialize_perceptron(X, params['learning_rate'])
+        
+        elif choice == '9':
+            print("\nKöszönjük, hogy használta az alkalmazást!")
+            break
+        
+        else:
+            print("\nÉrvénytelen opció! Kérjük, válasszon 1-9 közötti számot.")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\nProgram megszakítva a felhasználó által.")
+        sys.exit(0)
+    except Exception as e:
+        print(f"\nHiba történt: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
