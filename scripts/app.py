@@ -310,3 +310,21 @@ with tab2:
                 st.metric("Bias (b)", f"{st.session_state.perceptron.bias:.4f}")
             
             st.divider()
+            
+            col_train1, col_train2, col_train3 = st.columns(3)
+            
+            with col_train1:
+                if st.button("Egy lépés tanítás", use_container_width=True, type="primary"):
+                    if st.session_state.perceptron and st.session_state.X is not None:
+                        errors = st.session_state.perceptron.fit_step(st.session_state.X, st.session_state.y)
+                        st.session_state.perceptron.errors_history.append(errors)
+                        st.session_state.perceptron.weights_history.append(
+                            (st.session_state.perceptron.weights.copy(), st.session_state.perceptron.bias)
+                        )
+                        st.session_state.current_epoch += 1
+                        
+                        if errors == 0:
+                            st.success(f"Konvergencia elérve! {st.session_state.current_epoch} epoch után nincs hiba!")
+                        else:
+                            st.info(f"Epoch {st.session_state.current_epoch}: {errors} hiba")
+                        st.rerun()
