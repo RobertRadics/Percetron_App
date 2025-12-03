@@ -155,3 +155,16 @@ def plot_convergence_interactive(errors_history):
         line=dict(color='#3b82f6', width=3),
         marker=dict(size=8, color='#3b82f6')
     ))
+    
+    fig.update_layout(
+        title='Konvergencia görbe - Hibák száma epochonként',
+        xaxis_title='Epoch',
+        yaxis_title='Hibák száma',
+        width=800,
+        height=400,
+        title_font_size=20,
+        font_size=12,
+        hovermode='x unified'
+    )
+    
+    return fig
