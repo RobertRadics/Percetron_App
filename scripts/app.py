@@ -222,4 +222,26 @@ max_epochs = st.number_input(
         value=100,
         step=10
     )
+
+if st.button("Perceptron inicializálása", use_container_width=True):
+        if st.session_state.data_loaded:
+            st.session_state.perceptron = Perceptron(
+                learning_rate=learning_rate,
+                n_features=st.session_state.X.shape[1]
+            )
+            reset_training()
+            st.success("Perceptron inicializálva!")
+            st.rerun()
+        else:
+            st.warning("Először töltse be az adatokat!")
+    
+st.divider()
+    
+if st.button("Minden törlése", use_container_width=True):
+        st.session_state.perceptron = None
+        st.session_state.X = None
+        st.session_state.y = None
+        st.session_state.data_loaded = False
+        reset_training()
+        st.rerun()
     
