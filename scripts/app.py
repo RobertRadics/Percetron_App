@@ -90,3 +90,23 @@ def plot_data_interactive(X, y):
         font_size=12
     )
     return fig
+
+def plot_decision_boundary_interactive(X, y, perceptron, epoch=None):
+    class_0 = X[y == 0]
+    class_1 = X[y == 1]
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatter(
+        x=class_0[:, 0], y=class_0[:, 1],
+        mode='markers',
+        name='Osztály 0',
+        marker=dict(size=12, color='#ef4444', line=dict(width=1, color='black'))
+    ))
+    
+    fig.add_trace(go.Scatter(
+        x=class_1[:, 0], y=class_1[:, 1],
+        mode='markers',
+        name='Osztály 1',
+        marker=dict(size=12, color='#3b82f6', line=dict(width=1, color='black'))
+    ))
