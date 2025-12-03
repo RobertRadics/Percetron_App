@@ -110,6 +110,7 @@ def plot_decision_boundary_interactive(X, y, perceptron, epoch=None):
         name='Osztály 1',
         marker=dict(size=12, color='#3b82f6', line=dict(width=1, color='black'))
     ))
+    
     x1_min, x1_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
     x2_min, x2_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
     
@@ -185,7 +186,7 @@ with st.sidebar:
         index=0 if data_files else None
     )
     
-if st.button("Adatok betöltése", type="primary", use_container_width=True):
+    if st.button("Adatok betöltése", type="primary", use_container_width=True):
         loader = DataLoader()
         file_path = data_dir / selected_file if selected_file in data_files else data_dir / 'data.csv'
         if loader.load_from_file(str(file_path)):
@@ -202,11 +203,11 @@ if st.button("Adatok betöltése", type="primary", use_container_width=True):
         else:
             st.error("Hiba történt az adatbetöltés során!")
     
-        st.divider()
+    st.divider()
     
-st.subheader("Perceptron Paraméterek")
+    st.subheader("Perceptron Paraméterek")
     
-learning_rate = st.slider(
+    learning_rate = st.slider(
         "Tanulási ráta (Learning Rate)",
         min_value=0.001,
         max_value=0.5,
@@ -215,15 +216,15 @@ learning_rate = st.slider(
         format="%.3f"
     )
     
-max_epochs = st.number_input(
+    max_epochs = st.number_input(
         "Maximális epoch szám",
         min_value=1,
         max_value=1000,
         value=100,
         step=10
     )
-
-if st.button("Perceptron inicializálása", use_container_width=True):
+    
+    if st.button("Perceptron inicializálása", use_container_width=True):
         if st.session_state.data_loaded:
             st.session_state.perceptron = Perceptron(
                 learning_rate=learning_rate,
@@ -235,9 +236,9 @@ if st.button("Perceptron inicializálása", use_container_width=True):
         else:
             st.warning("Először töltse be az adatokat!")
     
-st.divider()
+    st.divider()
     
-if st.button("Minden törlése", use_container_width=True):
+    if st.button("Minden törlése", use_container_width=True):
         st.session_state.perceptron = None
         st.session_state.X = None
         st.session_state.y = None
@@ -259,10 +260,10 @@ if st.session_state.data_loaded:
             st.metric("Perceptron", "Inicializálva")
         else:
             st.metric("Perceptron", "Nincs inicializálva")
-
-tab1, tab2, tab3, tab4 = st.tabs(["Adatok", "Tanítás", "Vizualizáció", "Konvergencia"])
     
-with tab1:
+    tab1, tab2, tab3, tab4 = st.tabs(["Adatok", "Tanítás", "Vizualizáció", "Konvergencia"])
+    
+    with tab1:
         st.subheader("Adatpontok megjelenítése")
         
         col_left, col_right = st.columns([2, 1])
@@ -280,8 +281,8 @@ with tab1:
             st.subheader("Osztály eloszlás")
             class_counts = pd.Series(st.session_state.y).value_counts().sort_index()
             st.bar_chart(class_counts)
-            
-with tab2:
+    
+    with tab2:
         st.subheader("Perceptron Tanítás")
         
         if not st.session_state.perceptron:
@@ -328,10 +329,11 @@ with tab2:
                         else:
                             st.info(f"Epoch {st.session_state.current_epoch}: {errors} hiba")
                         st.rerun()
-                        with col_train2:
-                            if st.button("Teljes tanítás", use_container_width=True, type="primary"):
-                                if st.session_state.perceptron and st.session_state.X is not None:
-                                    progress_bar = st.progress(0)
+            
+            with col_train2:
+                if st.button("Teljes tanítás", use_container_width=True, type="primary"):
+                    if st.session_state.perceptron and st.session_state.X is not None:
+                        progress_bar = st.progress(0)
                         status_text = st.empty()
                         
                         st.session_state.perceptron.errors_history = []
@@ -357,9 +359,10 @@ with tab2:
                         progress_bar.empty()
                         status_text.empty()
                         st.rerun()
-                with col_train3:
-                    if st.button("Újraindítás", use_container_width=True):
-                        reset_training()
+            
+            with col_train3:
+                if st.button("Újraindítás", use_container_width=True):
+                    reset_training()
                     if st.session_state.X is not None:
                         st.session_state.perceptron = Perceptron(
                             learning_rate=learning_rate,
@@ -380,8 +383,9 @@ with tab2:
                 })
                 
                 st.dataframe(history_df.tail(20), use_container_width=True)
-        with tab3:
-                st.subheader("Vizualizáció")
+    
+    with tab3:
+        st.subheader("Vizualizáció")
         
         if not st.session_state.perceptron:
             st.warning("Először inicializálja és tanítsa a perceptront!")
@@ -421,9 +425,9 @@ with tab2:
                     epoch=selected_epoch
                 )
                 st.plotly_chart(fig_animated, use_container_width=True, key="animated_boundary")
-            
-            with tab4:
-                st.subheader("Konvergencia görbe")
+    
+    with tab4:
+        st.subheader("Konvergencia görbe")
         
         if not st.session_state.perceptron:
             st.warning("Először inicializálja a perceptront!")
@@ -452,9 +456,9 @@ with tab2:
             with col_stat3:
                 min_errors = min(st.session_state.perceptron.errors_history)
                 st.metric("Minimum hibák", min_errors)
-                
+
 else:
-st.info("""
+    st.info("""
      **Üdvözöljük a Perceptron Tanító Alkalmazásban!**
     
     Kezdéshez:
@@ -470,8 +474,8 @@ st.info("""
     -  Konvergencia követése
     """)
     
-st.subheader(" Elérhető adatfájlok")
-if data_files:
+    st.subheader(" Elérhető adatfájlok")
+    if data_files:
         st.write("A következő adatfájlok érhetők el:")
         for file in data_files:
             st.write(f"- {file}")
