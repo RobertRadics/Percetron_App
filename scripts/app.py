@@ -173,3 +173,14 @@ data_dir = Path(__file__).parent.parent / 'data'
 data_files = [f for f in os.listdir(data_dir) if f.endswith('.csv')] if data_dir.exists() else []
 
 st.markdown('<h1 class="main-header">Perceptron Tanító Alkalmazás</h1>', unsafe_allow_html=True)
+
+with st.sidebar:
+    st.header("Beállítások")
+    
+    st.subheader("Adatbetöltés")
+    
+    selected_file = st.selectbox(
+        "Válasszon adatfájlt:",
+        options=data_files if data_files else ['data.csv'],
+        index=0 if data_files else None
+    )
