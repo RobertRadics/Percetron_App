@@ -49,3 +49,16 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+if 'perceptron' not in st.session_state:
+    st.session_state.perceptron = None
+if 'X' not in st.session_state:
+    st.session_state.X = None
+if 'y' not in st.session_state:
+    st.session_state.y = None
+if 'data_loaded' not in st.session_state:
+    st.session_state.data_loaded = False
+if 'training_history' not in st.session_state:
+    st.session_state.training_history = []
+if 'current_epoch' not in st.session_state:
+    st.session_state.current_epoch = 0
