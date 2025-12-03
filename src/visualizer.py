@@ -86,3 +86,11 @@ class Visualizer:
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
         return plt.gcf()
+    
+    def show(self):
+        plt.show()
+    
+    def save(self, filename):
+        if self.fig:
+            self.fig.savefig(filename, dpi=300, bbox_inches='tight')
+            print(f"Grafikon mentve: {filename}")
