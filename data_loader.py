@@ -53,3 +53,24 @@ class DataLoader:
         except Exception as e:
             print(f"Hiba történt a fájl betöltése során: {e}")
             return False
+        
+    def get_data(self):
+        if self.X is None or self.y is None:
+            return None, None
+        return self.X, self.y
+    
+    def get_dataframe(self):
+        return self.data
+    
+    def print_summary(self):
+        if self.data is None:
+            print("Nincs betöltött adat")
+            return
+        
+        print("\n=== Adatok összefoglalója ===")
+        print(f"Sorok száma: {len(self.data)}")
+        print(f"Attribútumok száma: {self.X.shape[1]}")
+        print(f"\nElső 5 sor:")
+        print(self.data.head())
+        print(f"\nStatisztikák:")
+        print(self.data.describe())
