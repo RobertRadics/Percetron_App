@@ -62,3 +62,10 @@ if 'training_history' not in st.session_state:
     st.session_state.training_history = []
 if 'current_epoch' not in st.session_state:
     st.session_state.current_epoch = 0
+
+def reset_training():
+    st.session_state.training_history = []
+    st.session_state.current_epoch = 0
+    if st.session_state.perceptron:
+        st.session_state.perceptron.errors_history = []
+        st.session_state.perceptron.weights_history = []
