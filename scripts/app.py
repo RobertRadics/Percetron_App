@@ -184,3 +184,21 @@ with st.sidebar:
         options=data_files if data_files else ['data.csv'],
         index=0 if data_files else None
     )
+    
+if st.button("Adatok betöltése", type="primary", use_container_width=True):
+        loader = DataLoader()
+        file_path = data_dir / selected_file if selected_file in data_files else data_dir / 'data.csv'
+        if loader.load_from_file(str(file_path)):
+            st.session_state.X, st.session_state.y = loader.get_data()
+            st.session_state.data_loaded = True
+            st.session_state.data_info = {
+                'samples': len(st.session_state.X),
+                'features': st.session_state.X.shape[1],
+                'classes': np.unique(st.session_state.y)
+            }
+            reset_training()
+            st.success(f"Adatok sikeresen betöltve: {selected_file}")
+            st.rerun()
+        else:
+            st.error("Hiba történt az adatbetöltés során!")
+    
