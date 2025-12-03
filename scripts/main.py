@@ -61,3 +61,12 @@ def load_data_interactive():
         return loader.get_data()
     else:
         return None, None
+    
+def initialize_perceptron(X, learning_rate=0.01):
+    n_features = X.shape[1]
+    perceptron = Perceptron(learning_rate=learning_rate, n_features=n_features)
+    print(f"\nPerceptron inicializálva:")
+    print(f"  Tanulási ráta: {learning_rate}")
+    print(f"  Kezdeti súlyok: {perceptron.weights}")
+    print(f"  Kezdeti bias: {perceptron.bias:.3f}")
+    return perceptron
