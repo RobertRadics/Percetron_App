@@ -96,3 +96,73 @@ def train_full_interactive(perceptron, X, y):
         print(f"Még mindig vannak hibák: {errors_history[-1]}")
     
     return errors_history
+
+def train_interactive_step_by_step(perceptron, X, y, visualizer):
+    print("\n--- Interaktív tanítás (epochonkénti megállás) ---")
+    print("Adja meg a maximális epoch számot (Enter = 100):")
+    max_epochs_input = input("Max epoch: ").strip()
+    max_epochs = int(max_epochs_input) if max_epochs_input else 100
+    
+    print("\nMinden epoch után dönthet:")
+    print("  - Enter: következő epoch")
+    print("  - 'g': grafikon megjelenítése")
+    print("  - 'q': kilépés")
+    
+    epoch = 0
+    while epoch < max_epochs:
+        epoch += 1
+        
+        errors = perceptron.fit_step(X, y)
+        
+        perceptron.errors_history.append(errors)
+        perceptron.weights_history.append((perceptron.weights.copy(), perceptron.bias))
+        
+        print(f"\n{'='*60}")
+        print(f"Epoch {epoch}/{max_epochs}")
+        print(f"{'='*60}")
+        print(f"Hibák száma: {errors}")
+        print(f"Súlyok: [{perceptron.weights[0]:.4f}, {perceptron.weights[1]:.4f}]")
+        print(f"Bias: {perceptron.bias:.4f}")
+        
+        if epoch > 1:
+            prev_weights, prev_bias = perceptron.weights_history[-2]
+            weight_change = perceptron.weights - prev_weights
+            bias_change = perceptron.bias - prev_bias
+            print(f"\nSúlyok változása: [{weight_change[0]:.4f}, {weight_change[1]:.4f}]")
+            print(f"Bias változása: {bias_change:.4f}")
+        
+        if errors == 0:
+            print(f"\n{'='*60}")
+            print("KONVERGENCIA ELÉRVE!")
+            print(f"A perceptron {epoch} epoch után konvergált - nincs hiba!")
+            print(f"{'='*60}")
+            break
+        
+        print(f"\nMit szeretne tenni? (Enter = folytatás, 'g' = grafikon, 'q' = kilépés)")
+        user_input = input("Választás: ").strip().lower()
+        
+        if user_input == 'q':
+            print(f"\nTanítás megszakítva {epoch} epoch után.")
+            break
+        elif user_input == 'g':
+            print("\nGrafikon megjelenítése...")
+            fig = visualizer.plot_with_decision_boundary(
+                X, y, perceptron, epoch=epoch, show_history=True
+            )
+            visualizer.show()
+            print("\nFolytatás? (Enter = igen, 'q' = kilépés)")
+            continue_input = input("Választás: ").strip().lower()
+            if continue_input == 'q':
+                print(f"\nTanítás megszakítva {epoch} epoch után.")
+                break
+    
+    print(f"\n{'='*60}")
+    print("Interaktív tanítás befejezve!")
+    print(f"Összesen {epoch} epoch futott le.")
+    if perceptron.errors_history and perceptron.errors_history[-1] == 0:
+        print("Konvergencia elérve!")
+    else:
+        print(f"Utolsó epoch hibái: {perceptron.errors_history[-1] if perceptron.errors_history else 'N/A'}")
+    print(f"{'='*60}")
+    
+    return perceptron.errors_history
