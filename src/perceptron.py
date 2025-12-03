@@ -59,3 +59,16 @@ class Perceptron:
                 break
         
         return self.errors_history
+    
+    def get_decision_boundary(self, x_range):
+        x1_min, x1_max = x_range
+        x1_values = np.linspace(x1_min, x1_max, 100)
+        
+        if abs(self.weights[1]) < 1e-10:
+            x1_boundary = -self.bias / self.weights[0] if abs(self.weights[0]) > 1e-10 else x1_min
+            x2_values = np.linspace(x_range[0], x_range[1], 100)
+            return np.full(100, x1_boundary), x2_values
+        
+        x2_values = -(self.weights[0] * x1_values + self.bias) / self.weights[1]
+        
+        return x1_values, x2_values
