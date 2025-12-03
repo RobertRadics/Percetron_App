@@ -380,4 +380,45 @@ with tab2:
                 })
                 
                 st.dataframe(history_df.tail(20), use_container_width=True)
+        with tab3:
+                st.subheader("Vizualizáció")
+        
+        if not st.session_state.perceptron:
+            st.warning("Először inicializálja és tanítsa a perceptront!")
+        elif not st.session_state.perceptron.errors_history:
+            st.warning("Először tanítsa a perceptront!")
+        else:
+            epoch_num = len(st.session_state.perceptron.errors_history)
+            fig_boundary = plot_decision_boundary_interactive(
+                st.session_state.X, 
+                st.session_state.y, 
+                st.session_state.perceptron,
+                epoch=epoch_num
+            )
+            st.plotly_chart(fig_boundary, use_container_width=True, key="decision_boundary")
+            
+            if len(st.session_state.perceptron.weights_history) > 1:
+                st.subheader("Epoch-onkénti animáció")
+                selected_epoch = st.slider(
+                    "Válasszon epoch-ot:",
+                    min_value=1,
+                    max_value=len(st.session_state.perceptron.weights_history),
+                    value=len(st.session_state.perceptron.weights_history),
+                    step=1
+                )
+                
+                temp_perceptron = Perceptron(
+                    learning_rate=st.session_state.perceptron.learning_rate,
+                    n_features=st.session_state.perceptron.n_features
+                )
+                temp_perceptron.weights = st.session_state.perceptron.weights_history[selected_epoch - 1][0].copy()
+                temp_perceptron.bias = st.session_state.perceptron.weights_history[selected_epoch - 1][1]
+                
+                fig_animated = plot_decision_boundary_interactive(
+                    st.session_state.X,
+                    st.session_state.y,
+                    temp_perceptron,
+                    epoch=selected_epoch
+                )
+                st.plotly_chart(fig_animated, use_container_width=True, key="animated_boundary")
             
